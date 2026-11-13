@@ -1,5 +1,6 @@
 package com.chuckerteam.chucker.api
 
+import com.chuckerteam.chucker.internal.data.entity.MockAction
 import com.chuckerteam.chucker.util.ChuckerInterceptorDelegate
 import com.chuckerteam.chucker.util.ClientFactory
 import com.chuckerteam.chucker.util.NoLoggerRule
@@ -16,7 +17,7 @@ import java.io.File
 import java.util.concurrent.TimeUnit
 
 @ExtendWith(NoLoggerRule::class)
-internal class ChuckerInterceptorMapRemoteTest {
+internal class ChuckerInterceptorMockRemoteTest {
     private val originalServer = MockWebServer()
     private val targetServer = MockWebServer()
 
@@ -36,7 +37,7 @@ internal class ChuckerInterceptorMapRemoteTest {
         ChuckerInterceptorDelegate(
             cacheDirectoryProvider = { tempDir },
             skipPaths = skipPaths,
-            mapRemoteTargetResolver = { url, _ -> if (url == originalUrl) targetUrl else null },
+            mockResolver = { url, _ -> MockAction.MapRemote(targetUrl, "Staging").takeIf { url == originalUrl } },
         )
 
     @Test
@@ -101,7 +102,7 @@ internal class ChuckerInterceptorMapRemoteTest {
         val transaction = chucker.expectTransaction()
         assertThat(transaction.url).isEqualTo(originalUrl.toString())
         assertThat(transaction.mappedUrl).isEqualTo(targetUrl.toString())
-        assertThat(transaction.isMapRemoteIgnored).isFalse()
+        assertThat(transaction.isMockIgnored).isFalse()
         assertThat(transaction.isNetworkInterceptor).isFalse()
         assertThat(transaction.responseBody).isEqualTo("mocked")
     }
@@ -156,7 +157,7 @@ internal class ChuckerInterceptorMapRemoteTest {
         assertThat(targetServer.requestCount).isEqualTo(0)
         val transaction = chucker.expectTransaction()
         assertThat(transaction.mappedUrl).isNull()
-        assertThat(transaction.isMapRemoteIgnored).isTrue()
+        assertThat(transaction.isMockIgnored).isTrue()
         assertThat(transaction.isNetworkInterceptor).isTrue()
     }
 
@@ -171,7 +172,7 @@ internal class ChuckerInterceptorMapRemoteTest {
             .execute()
             .close()
 
-        assertThat(chucker.expectTransaction().isMapRemoteIgnored).isFalse()
+        assertThat(chucker.expectTransaction().isMockIgnored).isFalse()
     }
 
     @Test

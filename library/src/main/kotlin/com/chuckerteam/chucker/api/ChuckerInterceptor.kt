@@ -3,8 +3,10 @@ package com.chuckerteam.chucker.api
 import android.content.Context
 import androidx.annotation.VisibleForTesting
 import com.chuckerteam.chucker.internal.data.entity.HttpTransaction
-import com.chuckerteam.chucker.internal.data.entity.toMapRemoteRuleUrl
-import com.chuckerteam.chucker.internal.data.repository.MapRemoteTargetResolver
+import com.chuckerteam.chucker.internal.data.entity.MapLocalMode
+import com.chuckerteam.chucker.internal.data.entity.MockAction
+import com.chuckerteam.chucker.internal.data.entity.toMockRuleUrl
+import com.chuckerteam.chucker.internal.data.repository.MockResolver
 import com.chuckerteam.chucker.internal.data.repository.RepositoryProvider
 import com.chuckerteam.chucker.internal.support.CacheDirectoryProvider
 import com.chuckerteam.chucker.internal.support.Logger
@@ -12,6 +14,8 @@ import com.chuckerteam.chucker.internal.support.PlainTextDecoder
 import com.chuckerteam.chucker.internal.support.RequestProcessor
 import com.chuckerteam.chucker.internal.support.ResponseProcessor
 import com.chuckerteam.chucker.internal.support.addNonBlankPathSegments
+import com.chuckerteam.chucker.internal.support.mockResponse
+import com.chuckerteam.chucker.internal.support.overrideResponse
 import okhttp3.HttpUrl
 import okhttp3.Interceptor
 import okhttp3.Request
@@ -66,9 +70,9 @@ public class ChuckerInterceptor private constructor(
     private val skipDomains = builder.skipDomains.toSet()
     private val skipDomainRegex = builder.skipDomainRegex.toSet()
 
-    private val mapRemoteTargetResolver =
-        builder.mapRemoteTargetResolver
-            ?: MapRemoteTargetResolver { url, method -> RepositoryProvider.mapRemoteRule().findTarget(url, method) }
+    private val mockResolver =
+        builder.mockResolver
+            ?: MockResolver { url, method -> RepositoryProvider.mock().findAction(url, method) }
 
     init {
         if (builder.createShortcut) {
@@ -93,14 +97,23 @@ public class ChuckerInterceptor private constructor(
             shouldSkipPath || skipDomains.contains(host) || skipDomainRegex.any { it.matches(host) }
         val shouldProcessTheRequest = !(shouldSkipPath || shouldSkipDomain)
 
-        val mapRemoteTarget = if (shouldProcessTheRequest) resolveMapRemoteTarget(chain, transaction) else null
+        val mockAction = if (shouldProcessTheRequest) resolveMockAction(chain, transaction) else null
         if (shouldProcessTheRequest) {
             transaction.isNetworkInterceptor = chain.connection() != null
             requestProcessor.process(request, transaction)
         }
         val response =
             try {
-                chain.proceed(if (mapRemoteTarget != null) request.mappedTo(mapRemoteTarget) else request)
+                when (mockAction) {
+                    null -> chain.proceed(request)
+                    is MockAction.MapRemote -> chain.proceed(request.mappedTo(mockAction.target))
+                    is MockAction.MapLocal ->
+                        if (mockAction.mode == MapLocalMode.MOCK) {
+                            mockResponse(request, mockAction)
+                        } else {
+                            overrideResponse(chain.proceed(request), mockAction)
+                        }
+                }
             } catch (e: IOException) {
                 transaction.error = e.toString()
                 collector.onResponseReceived(transaction)
@@ -120,23 +133,27 @@ public class ChuckerInterceptor private constructor(
         }
     }
 
-    private fun resolveMapRemoteTarget(
+    private fun resolveMockAction(
         chain: Interceptor.Chain,
         transaction: HttpTransaction,
-    ): HttpUrl? {
+    ): MockAction? {
         val request = chain.request()
-        val target = mapRemoteTargetResolver.findTarget(request.url, request.method) ?: return null
-        // A network interceptor already holds a connection, and OkHttp fails the call if the host changes.
+        val action = mockResolver.findAction(request.url, request.method) ?: return null
+        // A network interceptor already holds a connection to the original host and must send the call:
+        // OkHttp fails the call if the host changes, and a mocked call would never reach the server.
         if (chain.connection() != null) {
             Logger.warn(
-                "Ignoring Map Remote rule for ${request.url.toMapRemoteRuleUrl()}: " +
-                    "it needs an application interceptor",
+                "Ignoring mock rule for ${request.url.toMockRuleUrl()}: it needs an application interceptor",
             )
-            transaction.isMapRemoteIgnored = true
+            transaction.isMockIgnored = true
             return null
         }
-        transaction.mappedUrl = target.toString()
-        return target
+        transaction.mockName = action.name
+        when (action) {
+            is MockAction.MapRemote -> transaction.mappedUrl = action.target.toString()
+            is MockAction.MapLocal -> transaction.mapLocalMode = action.mode.name
+        }
+        return action
     }
 
     /** A `Host` header set by the app names the original server, so OkHttp has to set the one of the target. */
@@ -166,7 +183,7 @@ public class ChuckerInterceptor private constructor(
         internal val skipPathsRegex = mutableSetOf<Regex>()
         internal val skipDomains = mutableSetOf<String>()
         internal val skipDomainRegex = mutableSetOf<Regex>()
-        internal var mapRemoteTargetResolver: MapRemoteTargetResolver? = null
+        internal var mockResolver: MockResolver? = null
 
         /**
          * Sets the [ChuckerCollector] to customize data retention.
@@ -245,12 +262,12 @@ public class ChuckerInterceptor private constructor(
             }
 
         /**
-         * Sets where calls are mapped to, instead of the rules saved from the Chucker UI.
+         * Sets how calls are mocked, instead of the rules saved from the Chucker UI.
          */
         @VisibleForTesting
-        internal fun mapRemoteTargetResolver(resolver: MapRemoteTargetResolver): Builder =
+        internal fun mockResolver(resolver: MockResolver): Builder =
             apply {
-                this.mapRemoteTargetResolver = resolver
+                this.mockResolver = resolver
             }
 
         /**

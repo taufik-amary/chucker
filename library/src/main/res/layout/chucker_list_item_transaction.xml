@@ -80,7 +80,7 @@
         tools:text="example.com" />
 
     <TextView
-        android:id="@+id/mapRemoteTarget"
+        android:id="@+id/mock"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:ellipsize="end"
@@ -90,7 +90,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/path"
         app:layout_constraintTop_toBottomOf="@+id/host"
-        tools:text="→ https://mock.example.com/path"
+        tools:text="Map Remote → https://mock.example.com/path"
         tools:visibility="visible" />
 
     <ImageView
@@ -109,7 +109,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toStartOf="@+id/duration"
         app:layout_constraintStart_toStartOf="@+id/path"
-        app:layout_constraintTop_toBottomOf="@+id/mapRemoteTarget"
+        app:layout_constraintTop_toBottomOf="@+id/mock"
         tools:text="18:29:07 PM" />
 
     <TextView

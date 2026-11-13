@@ -14,7 +14,7 @@ import com.chuckerteam.chucker.R
 import com.chuckerteam.chucker.databinding.ChuckerFragmentTransactionOverviewBinding
 import com.chuckerteam.chucker.internal.data.entity.HttpTransaction
 import com.chuckerteam.chucker.internal.support.combineLatest
-import com.chuckerteam.chucker.internal.ui.mapremote.MapRemoteRuleEditActivity
+import com.chuckerteam.chucker.internal.ui.mock.MockEndpointActivity
 
 internal class TransactionOverviewFragment : Fragment() {
     private val viewModel: TransactionViewModel by activityViewModels { TransactionViewModelFactory() }
@@ -59,15 +59,17 @@ internal class TransactionOverviewFragment : Fragment() {
             Observer { (transaction, encodeUrl) -> populateUI(transaction, encodeUrl) },
         )
 
-        overviewBinding.setupMapRemote.setOnClickListener {
+        overviewBinding.setupMock.setOnClickListener {
             val transaction = viewModel.transaction.value ?: return@setOnClickListener
             // `url` is decoded, which can't be turned back into the URL of the call, e.g. with %2F in its path.
             val requestUrl = transaction.encodedUrl ?: return@setOnClickListener
             val method = transaction.method ?: return@setOnClickListener
-            MapRemoteRuleEditActivity.start(
+            // The response is read from the database by the next screen, as it can be too large for an Intent.
+            MockEndpointActivity.start(
                 requireContext(),
                 requestUrl,
                 method,
+                transactionId = transaction.id,
                 isNetworkInterceptor = transaction.isNetworkInterceptor,
             )
         }
@@ -79,9 +81,9 @@ internal class TransactionOverviewFragment : Fragment() {
     ) {
         with(overviewBinding) {
             url.text = transaction?.getFormattedUrl(encodeUrl)
-            val mappedToText = transaction?.getMappedToText(requireContext())
-            mapRemoteGroup.isVisible = mappedToText != null
-            mappedUrl.text = mappedToText
+            val mockText = transaction?.getMockText(requireContext())
+            mockGroup.isVisible = mockText != null
+            mockValue.text = mockText
             hostIp.text = transaction?.hostIp
             method.text = transaction?.method
             protocol.text = transaction?.protocol

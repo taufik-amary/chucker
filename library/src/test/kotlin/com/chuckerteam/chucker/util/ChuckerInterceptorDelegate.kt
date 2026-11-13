@@ -6,7 +6,7 @@ import com.chuckerteam.chucker.api.BodyDecoder
 import com.chuckerteam.chucker.api.ChuckerCollector
 import com.chuckerteam.chucker.api.ChuckerInterceptor
 import com.chuckerteam.chucker.internal.data.entity.HttpTransaction
-import com.chuckerteam.chucker.internal.data.repository.MapRemoteTargetResolver
+import com.chuckerteam.chucker.internal.data.repository.MockResolver
 import com.chuckerteam.chucker.internal.support.CacheDirectoryProvider
 import io.mockk.every
 import io.mockk.mockk
@@ -25,7 +25,7 @@ internal class ChuckerInterceptorDelegate(
     skipPathsRegex: List<Regex> = emptyList(),
     skipDomains: List<String> = emptyList(),
     skipDomainsRegex: List<Regex> = emptyList(),
-    mapRemoteTargetResolver: MapRemoteTargetResolver = MapRemoteTargetResolver { _, _ -> null },
+    mockResolver: MockResolver = MockResolver { _, _ -> null },
 ) : Interceptor {
     private val idGenerator = AtomicLong()
     private val transactions = CopyOnWriteArrayList<HttpTransaction>()
@@ -52,7 +52,7 @@ internal class ChuckerInterceptorDelegate(
             .redactHeaders(headersToRedact)
             .alwaysReadResponseBody(alwaysReadResponseBody)
             .cacheDirectorProvider(cacheDirectoryProvider)
-            .mapRemoteTargetResolver(mapRemoteTargetResolver)
+            .mockResolver(mockResolver)
             .skipPaths(paths = skipPaths.toTypedArray())
             .skipDomains(domains = skipDomains.toTypedArray())
             .apply { skipPathsRegex.forEach(::skipPaths) }

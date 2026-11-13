@@ -16,11 +16,11 @@
         tools:text="POST https://example.com/path" />
 
     <TextView
-        android:id="@+id/targetUrl"
+        android:id="@+id/summary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/chucker_half_grid"
         android:textColor="@color/chucker_status_300"
-        tools:text="→ https://mock.example.com/path" />
+        tools:text="Map Remote → https://mock.example.com/path" />
 
 </LinearLayout>

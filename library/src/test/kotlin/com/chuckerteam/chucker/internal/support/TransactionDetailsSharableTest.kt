@@ -42,19 +42,32 @@ internal class TransactionDetailsSharableTest {
 
         val sharedContent = sharableTransaction.toSharableUtf8Content(context)
 
-        assertThat(sharedContent).contains("Mapped to: https://mock.example.com/\n")
+        assertThat(sharedContent).contains("Mock: Map Remote → https://mock.example.com/\n")
     }
 
     @Test
-    fun `sharable content tells when a Map Remote rule was not applied`() {
+    fun `sharable content tells when a mock rule was not applied`() {
         val transaction =
             TestTransactionFactory.createTransaction("GET").apply {
-                isMapRemoteIgnored = true
+                isMockIgnored = true
             }
         val sharableTransaction = TransactionDetailsSharable(transaction, encodeUrls = false)
 
         val sharedContent = sharableTransaction.toSharableUtf8Content(context)
 
-        assertThat(sharedContent).contains("Mapped to: Not applied: Map Remote requires addInterceptor\n")
+        assertThat(sharedContent).contains("Mock: Not applied: mocking requires addInterceptor\n")
+    }
+
+    @Test
+    fun `sharable content tells how a Map Local rule answered`() {
+        val transaction =
+            TestTransactionFactory.createTransaction("GET").apply {
+                mapLocalMode = "OVERRIDE"
+            }
+        val sharableTransaction = TransactionDetailsSharable(transaction, encodeUrls = false)
+
+        val sharedContent = sharableTransaction.toSharableUtf8Content(context)
+
+        assertThat(sharedContent).contains("Mock: Map Local · Override\n")
     }
 }

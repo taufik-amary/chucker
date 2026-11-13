@@ -155,22 +155,24 @@ object ProtoDecoder : BodyDecoder {
 interceptorBuilder.addBodyDecoder(ProtoDecoder).build()
 ```
 
-### Map Remote 🔀
+### Mocking 🎭
 
-You can map an endpoint to another URL (a mock server, a staging host...) from the Chucker UI, without changing your code or rebuilding the app:
+You can mock an endpoint from the Chucker UI, without changing your code or rebuilding the app. Open a recorded request, tap **Mock this endpoint** on the **Overview** tab, and turn mocking on.
 
-1. Open a recorded request and tap **Map to another URL** on the **Overview** tab.
-2. Enter the URL to map to and tap **Save**. Future calls of that method and URL go to the new URL.
+An endpoint can have several named mocks, such as one per test case, and you choose which one is applied. Tap **New mock for this endpoint** to add one, give it a name, and pick how it mocks future calls of that method and URL:
 
-Rules are kept across app restarts and when clearing the recorded requests. Manage them from **Map Remote rules** in the overflow menu of the main screen. Mapped requests are recorded with their original URL and show where they were sent to.
+- **Map Remote** sends them to another URL, such as a mock server or a staging host.
+- **Map Local** answers them with a response written in Chucker, prefilled with the recorded one. **Mock** answers without calling the server, **Override** calls the server and then replaces its status, body and the headers you list.
+
+Switch between mocks by choosing another one, and turn mocking off to stop without losing them. Mocks are kept across app restarts and when clearing the recorded requests. Manage them from **Mock rules** in the overflow menu of the main screen, where you can also disable or delete all of them at once. Mocked requests are recorded with their original URL, and the **Overview** tab tells which mock was applied, and how.
 
 A few things to keep in mind:
 
-- It requires `ChuckerInterceptor` to be added with `addInterceptor`. OkHttp doesn't allow a network interceptor to change the host of a call, so with `addNetworkInterceptor` rules can't be saved from a recorded request, and existing ones are not applied. The **Overview** tab of the matching requests tells so.
-- Add `ChuckerInterceptor` after interceptors that add headers you need on the mapped call. All headers and the body of the call are sent to the new URL, **including credentials like `Authorization`**, so only map to hosts you trust. The only exception is the `Host` header, which is set for the new URL.
-- Query parameters of the call are forwarded, unless the new URL has its own.
-- Calls excluded with `skipPaths` or `skipDomains` are not mapped, since Chucker ignores them entirely.
-- Mapping to an `http://` URL requires [cleartext traffic](https://developer.android.com/privacy-and-security/security-config#CleartextTrafficPermitted) to be allowed in your app.
+- It requires `ChuckerInterceptor` to be added with `addInterceptor`. OkHttp doesn't allow a network interceptor to change the host of a call or to skip the server, so with `addNetworkInterceptor` rules can't be saved from a recorded request, and existing ones are not applied. The **Overview** tab of the matching requests tells so.
+- With Map Remote, add `ChuckerInterceptor` after interceptors that add headers you need on the mapped call. All headers and the body of the call are sent to the new URL, **including credentials like `Authorization`**, so only map to hosts you trust. The only exception is the `Host` header, which is set for the new URL.
+- With Map Remote, query parameters of the call are forwarded, unless the new URL has its own. Mapping to an `http://` URL requires [cleartext traffic](https://developer.android.com/privacy-and-security/security-config#CleartextTrafficPermitted) to be allowed in your app.
+- With Map Local, `Content-Length`, `Content-Encoding` and `Transfer-Encoding` headers are dropped, as the body is sent as typed.
+- Calls excluded with `skipPaths` or `skipDomains` are not mocked, since Chucker ignores them entirely.
 
 ### Notification Permission 🔔
 

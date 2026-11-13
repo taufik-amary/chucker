@@ -12,6 +12,7 @@ import com.chuckerteam.chucker.internal.data.entity.HttpTransaction
 import com.chuckerteam.chucker.internal.data.entity.createRequest
 import com.chuckerteam.chucker.internal.data.repository.HttpTransactionRepository
 import com.chuckerteam.chucker.internal.data.repository.RepositoryProvider
+import com.chuckerteam.chucker.internal.ui.mock.MockEndpointActivity
 import com.google.common.truth.Truth.assertThat
 import io.mockk.every
 import io.mockk.just
@@ -29,7 +30,7 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.Shadows.shadowOf
 
 @RunWith(RobolectricTestRunner::class)
-internal class TransactionOverviewMapRemoteTest {
+internal class TransactionOverviewMockTest {
     private val repository = mockk<HttpTransactionRepository>()
 
     @Before
@@ -54,25 +55,30 @@ internal class TransactionOverviewMapRemoteTest {
         return activity
     }
 
-    private fun TransactionActivity.mappedRow() = findViewById<TextView>(R.id.mappedUrl)
+    private fun TransactionActivity.mockRow() = findViewById<TextView>(R.id.mockValue)
 
     @Test
-    fun `rule is set up with the encoded url of the call`() {
+    fun `endpoint screen is opened with the encoded url and the recorded response of the call`() {
         val transaction =
-            createRequest().apply { populateUrl("https://example.com/users/a%2Fb?page=1".toHttpUrl()) }
+            createRequest().apply {
+                id = 42L
+                populateUrl("https://example.com/users/a%2Fb?page=1".toHttpUrl())
+            }
         val activity = launchWith(transaction)
 
-        activity.findViewById<View>(R.id.setupMapRemote).performClick()
+        activity.findViewById<View>(R.id.setupMock).performClick()
 
         val intent = shadowOf(activity).nextStartedActivity
         assertThat(intent.getStringExtra("request_url")).isEqualTo("https://example.com/users/a%2Fb?page=1")
+        assertThat(intent.getLongExtra("transaction_id", -1L)).isEqualTo(42L)
+        assertThat(intent.component?.className).isEqualTo(MockEndpointActivity::class.java.name)
     }
 
     @Test
-    fun `rule screen is told when the call was recorded by a network interceptor`() {
+    fun `endpoint screen is told when the call was recorded by a network interceptor`() {
         val activity = launchWith(createRequest().apply { isNetworkInterceptor = true })
 
-        activity.findViewById<View>(R.id.setupMapRemote).performClick()
+        activity.findViewById<View>(R.id.setupMock).performClick()
 
         val intent = shadowOf(activity).nextStartedActivity
         assertThat(intent.getBooleanExtra("network_interceptor", false)).isTrue()
@@ -82,23 +88,35 @@ internal class TransactionOverviewMapRemoteTest {
     fun `row is hidden when no rule matched`() {
         val activity = launchWith(createRequest())
 
-        assertThat(activity.mappedRow().visibility).isEqualTo(View.GONE)
+        assertThat(activity.mockRow().visibility).isEqualTo(View.GONE)
     }
 
     @Test
-    fun `row shows where the call was mapped to`() {
+    fun `row shows where a map remote rule sent the call`() {
         val activity = launchWith(createRequest().apply { mappedUrl = "https://mock.example.com/" })
 
-        assertThat(activity.mappedRow().visibility).isEqualTo(View.VISIBLE)
-        assertThat(activity.mappedRow().text.toString()).isEqualTo("https://mock.example.com/")
+        assertThat(activity.mockRow().visibility).isEqualTo(View.VISIBLE)
+        assertThat(activity.mockRow().text.toString()).isEqualTo("Map Remote → https://mock.example.com/")
+    }
+
+    @Test
+    fun `row shows which mock answered the call, and how`() {
+        val activity =
+            launchWith(
+                createRequest().apply {
+                    mapLocalMode = "MOCK"
+                    mockName = "Server down"
+                },
+            )
+
+        assertThat(activity.mockRow().text.toString()).isEqualTo("Server down · Map Local · Mock")
     }
 
     @Test
     fun `row tells that a matching rule was not applied`() {
-        val activity = launchWith(createRequest().apply { isMapRemoteIgnored = true })
+        val activity = launchWith(createRequest().apply { isMockIgnored = true })
 
-        assertThat(activity.mappedRow().visibility).isEqualTo(View.VISIBLE)
-        assertThat(activity.mappedRow().text.toString())
-            .isEqualTo("Not applied: Map Remote requires addInterceptor")
+        assertThat(activity.mockRow().visibility).isEqualTo(View.VISIBLE)
+        assertThat(activity.mockRow().text.toString()).isEqualTo("Not applied: mocking requires addInterceptor")
     }
 }

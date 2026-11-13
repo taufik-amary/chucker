@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:popupTheme="@style/Chucker.Theme"
+            app:title="@string/chucker_mock_edit_title" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <!-- Shown while searching the body. -->
+    <LinearLayout
+        android:id="@+id/searchBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/chucker_color_primary"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <TextView
+            android:id="@+id/searchSummary"
+            style="@style/Chucker.TextAppearance.Body"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/chucker_doub_grid"
+            android:layout_weight="1"
+            android:paddingVertical="12dp"
+            android:textColor="@color/chucker_color_on_primary"
+            android:textStyle="bold"
+            tools:text="1 / 3" />
+
+        <ImageButton
+            android:id="@+id/searchPrevious"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="8dp"
+            android:background="?attr/selectableItemBackground"
+            android:contentDescription="@string/chucker_scroll_buttons_for_search"
+            android:paddingHorizontal="@dimen/chucker_base_grid"
+            android:rotation="180"
+            android:src="@drawable/chucker_ic_arrow_down" />
+
+        <ImageButton
+            android:id="@+id/searchNext"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="@dimen/chucker_base_grid"
+            android:background="?attr/selectableItemBackground"
+            android:contentDescription="@string/chucker_scroll_buttons_for_search"
+            android:paddingHorizontal="@dimen/chucker_base_grid"
+            android:src="@drawable/chucker_ic_arrow_down" />
+
+    </LinearLayout>
+
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:id="@+id/content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/chucker_doub_grid">
+
+            <TextView
+                android:id="@+id/networkInterceptorNotice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/chucker_doub_grid"
+                android:text="@string/chucker_mock_network_interceptor"
+                android:textColor="?attr/colorError"
+                android:visibility="gone"
+                tools:visibility="visible" />
+
+            <TextView
+                android:id="@+id/method"
+                style="@style/Chucker.TextAppearance.ListItem"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/chucker_base_grid"
+                tools:text="GET" />
+
+            <TextView
+                android:id="@+id/requestUrl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textIsSelectable="true"
+                tools:text="https://example.com/users" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/nameLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/chucker_doub_grid"
+                android:hint="@string/chucker_mock_name"
+                app:helperText="@string/chucker_mock_name_helper">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/nameInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:imeOptions="actionDone"
+                    android:inputType="textCapSentences" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <RadioGroup
+                android:id="@+id/typeGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/chucker_base_grid"
+                android:checkedButton="@id/typeMapLocal"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/typeMapRemote"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/chucker_mock_type_map_remote" />
+
+                <RadioButton
+                    android:id="@+id/typeMapLocal"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/chucker_mock_type_map_local" />
+
+            </RadioGroup>
+
+            <LinearLayout
+                android:id="@+id/mapRemoteSection"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/targetUrlLayout"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/chucker_doub_grid"
+                    android:hint="@string/chucker_mock_target_url"
+                    app:helperText="@string/chucker_mock_map_remote_note">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/targetUrlInput"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:imeOptions="actionDone"
+                        android:inputType="textUri" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/mapLocalSection"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <RadioGroup
+                    android:id="@+id/localModeGroup"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/chucker_base_grid"
+                    android:checkedButton="@id/localModeMock"
+                    android:orientation="vertical">
+
+                    <RadioButton
+                        android:id="@+id/localModeMock"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/chucker_mock_map_local_mock_description" />
+
+                    <RadioButton
+                        android:id="@+id/localModeOverride"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/chucker_mock_map_local_override_description" />
+
+                </RadioGroup>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/statusCodeLayout"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/chucker_doub_grid"
+                    android:hint="@string/chucker_mock_status_code">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/statusCodeInput"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:imeOptions="actionNext"
+                        android:inputType="number"
+                        android:maxLength="3" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/headersLayout"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/chucker_doub_grid"
+                    android:hint="@string/chucker_mock_headers"
+                    app:helperText="@string/chucker_mock_headers_helper">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/headersInput"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="monospace"
+                        android:gravity="top|start"
+                        android:inputType="textMultiLine|textNoSuggestions"
+                        android:minLines="3" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/bodyLayout"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/chucker_doub_grid"
+                    android:hint="@string/chucker_mock_body"
+                    app:helperText="@string/chucker_mock_map_local_note">
+
+                    <!-- No saveEnabled: a large body would exceed what the Activity can save. -->
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/bodyInput"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="monospace"
+                        android:gravity="top|start"
+                        android:inputType="textMultiLine|textNoSuggestions"
+                        android:minLines="6"
+                        android:saveEnabled="false" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/chucker_doub_grid"
+                android:text="@string/chucker_mock_note" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/save"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/chucker_doub_grid"
+                android:text="@string/chucker_save"
+                android:textAlignment="center" />
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

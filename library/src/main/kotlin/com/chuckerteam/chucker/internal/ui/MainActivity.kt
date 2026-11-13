@@ -40,7 +40,7 @@ import com.chuckerteam.chucker.internal.support.shareAsFile
 import com.chuckerteam.chucker.internal.support.showDialog
 import com.chuckerteam.chucker.internal.ui.MainActivity.ExportType.HAR
 import com.chuckerteam.chucker.internal.ui.MainActivity.ExportType.TEXT
-import com.chuckerteam.chucker.internal.ui.mapremote.MapRemoteRulesActivity
+import com.chuckerteam.chucker.internal.ui.mock.MockEndpointsActivity
 import com.chuckerteam.chucker.internal.ui.transaction.TransactionActivity
 import com.chuckerteam.chucker.internal.ui.transaction.TransactionAdapter
 import com.google.android.material.snackbar.Snackbar
@@ -268,8 +268,8 @@ internal class MainActivity :
                 true
             }
 
-            R.id.map_remote_rules -> {
-                MapRemoteRulesActivity.start(this)
+            R.id.mock_rules -> {
+                MockEndpointsActivity.start(this)
                 true
             }
 

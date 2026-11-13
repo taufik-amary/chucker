@@ -65,9 +65,11 @@ internal class HttpTransaction(
     @ColumnInfo(name = "graphQlDetected") var graphQlDetected: Boolean = false,
     @ColumnInfo(name = "graphQlOperationName") var graphQlOperationName: String?,
     @ColumnInfo(name = "mappedUrl") var mappedUrl: String? = null,
-    @ColumnInfo(name = "isMapRemoteIgnored") var isMapRemoteIgnored: Boolean = false,
+    @ColumnInfo(name = "isMockIgnored") var isMockIgnored: Boolean = false,
     @ColumnInfo(name = "encodedUrl") var encodedUrl: String? = null,
     @ColumnInfo(name = "isNetworkInterceptor") var isNetworkInterceptor: Boolean = false,
+    @ColumnInfo(name = "mapLocalMode") var mapLocalMode: String? = null,
+    @ColumnInfo(name = "mockName") var mockName: String? = null,
 ) {
     @Ignore
     constructor() : this(
@@ -165,11 +167,12 @@ internal class HttpTransaction(
         }
 
     /**
-     * Where this call was mapped to, or why a matching Map Remote rule wasn't applied.
-     * Null if no rule matched this call.
+     * How a mock rule changed this call, or why a matching rule wasn't applied.
+     * Null if no enabled rule matched this call.
      */
-    fun getMappedToText(context: Context): String? =
-        mappedUrl ?: context.getString(R.string.chucker_map_remote_ignored).takeIf { isMapRemoteIgnored }
+    fun getMockText(context: Context): String? =
+        getMockSummary(context, mappedUrl, mapLocalMode, mockName)
+            ?: context.getString(R.string.chucker_mock_ignored).takeIf { isMockIgnored }
 
     fun setRequestHeaders(headers: Headers) {
         setRequestHeaders(toHttpHeaderList(headers))
@@ -346,8 +349,10 @@ internal class HttpTransaction(
             (graphQlOperationName == other.graphQlOperationName) &&
             (graphQlDetected == other.graphQlDetected) &&
             (mappedUrl == other.mappedUrl) &&
-            (isMapRemoteIgnored == other.isMapRemoteIgnored) &&
+            (isMockIgnored == other.isMockIgnored) &&
             (encodedUrl == other.encodedUrl) &&
-            (isNetworkInterceptor == other.isNetworkInterceptor)
+            (isNetworkInterceptor == other.isNetworkInterceptor) &&
+            (mapLocalMode == other.mapLocalMode) &&
+            (mockName == other.mockName)
     }
 }

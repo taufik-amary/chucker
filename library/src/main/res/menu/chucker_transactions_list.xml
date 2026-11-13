@@ -42,7 +42,7 @@
         android:title="@string/chucker_clear"
         app:showAsAction="always" />
     <item
-        android:id="@+id/map_remote_rules"
-        android:title="@string/chucker_map_remote_rules"
+        android:id="@+id/mock_rules"
+        android:title="@string/chucker_mock_rules"
         app:showAsAction="never" />
 </menu>

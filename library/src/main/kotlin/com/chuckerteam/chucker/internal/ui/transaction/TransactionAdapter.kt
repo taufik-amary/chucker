@@ -16,6 +16,7 @@ import com.chuckerteam.chucker.R
 import com.chuckerteam.chucker.databinding.ChuckerListItemTransactionBinding
 import com.chuckerteam.chucker.internal.data.entity.HttpTransaction
 import com.chuckerteam.chucker.internal.data.entity.HttpTransactionTuple
+import com.chuckerteam.chucker.internal.data.entity.getMockSummary
 import com.chuckerteam.chucker.internal.support.TransactionDiffCallback
 import java.text.DateFormat
 import javax.net.ssl.HttpsURLConnection
@@ -154,8 +155,10 @@ internal class TransactionAdapter internal constructor(
                 displayGraphQlFields(transaction.graphQlOperationName, transaction.graphQlDetected)
                 path.text = "${transaction.method} ${transaction.getFormattedPath(encode = false)}"
                 host.text = transaction.host
-                mapRemoteTarget.isVisible = transaction.mappedUrl != null
-                mapRemoteTarget.text = "→ ${transaction.mappedUrl}"
+                val mockSummary =
+                    with(transaction) { getMockSummary(root.context, mappedUrl, mapLocalMode, mockName) }
+                mock.isVisible = mockSummary != null
+                mock.text = mockSummary
                 timeStart.text = DateFormat.getTimeInstance().format(transaction.requestDate)
 
                 setProtocolImage(if (transaction.isSsl) ProtocolResources.Https() else ProtocolResources.Http())

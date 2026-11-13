@@ -81,20 +81,65 @@
     <string name="chucker_copy_formatted">Copy Formatted</string>
     <string name="chucker_request_copied_formatted">Formatted Request Copied</string>
     <string name="chucker_response_copied_formatted">Formatted Response Copied</string>
-    <string name="chucker_mapped_to" translatable="false">Mapped to</string>
-    <string name="chucker_map_remote_ignored" translatable="false">Not applied: Map Remote requires addInterceptor</string>
-    <string name="chucker_map_remote_network_interceptor" translatable="false">This call was recorded by a network interceptor. Add ChuckerInterceptor with addInterceptor to use Map Remote.</string>
-    <string name="chucker_map_remote_rules" translatable="false">Map Remote rules</string>
-    <string name="chucker_map_remote_rules_empty" translatable="false">No Map Remote rules yet. Open a request and tap \"Map to another URL\" to add one.</string>
-    <string name="chucker_map_remote_setup" translatable="false">Map to another URL</string>
-    <string name="chucker_map_remote_edit_title" translatable="false">Map Remote</string>
-    <string name="chucker_map_remote_request_url" translatable="false">Request URL</string>
-    <string name="chucker_map_remote_target_url" translatable="false">Map to</string>
-    <string name="chucker_map_remote_invalid_url" translatable="false">Enter a valid http:// or https:// URL</string>
-    <string name="chucker_map_remote_already_exists" translatable="false">This method and URL already have a rule. Edit it from Map Remote rules.</string>
-    <string name="chucker_map_remote_failed" translatable="false">Couldn\'t access Map Remote rules</string>
-    <string name="chucker_map_remote_note" translatable="false">Changes apply to future calls of this method and URL, whatever their query parameters. They are forwarded to the new URL too, unless it has its own.</string>
-    <string name="chucker_map_remote_saved" translatable="false">Map Remote rule saved</string>
-    <string name="chucker_map_remote_deleted" translatable="false">Map Remote rule deleted</string>
-    <string name="chucker_map_remote_delete" translatable="false">Delete rule</string>
+    <string name="chucker_mock" translatable="false">Mock</string>
+    <string name="chucker_mock_rules" translatable="false">Mock rules</string>
+    <string name="chucker_mock_setup" translatable="false">Mock this endpoint</string>
+    <string name="chucker_mock_enabled" translatable="false">Mock this endpoint</string>
+    <string name="chucker_mock_type_map_remote" translatable="false">Map Remote</string>
+    <string name="chucker_mock_type_map_local" translatable="false">Map Local</string>
+    <string name="chucker_mock_target_url" translatable="false">Map to</string>
+    <string name="chucker_mock_invalid_url" translatable="false">Enter a valid http:// or https:// URL</string>
+    <string name="chucker_mock_map_remote_note" translatable="false">Calls are sent to this URL instead, with their query parameters unless it has its own.</string>
+    <string name="chucker_mock_map_local_mock_description" translatable="false">Mock: answer without calling the server</string>
+    <string name="chucker_mock_map_local_override_description" translatable="false">Override: call the server, then replace its response</string>
+    <string name="chucker_mock_status_code" translatable="false">Status code</string>
+    <string name="chucker_mock_invalid_status_code" translatable="false">Enter a status code between 100 and 599</string>
+    <string name="chucker_mock_headers" translatable="false">Headers</string>
+    <string name="chucker_mock_headers_helper" translatable="false">One \"Name: value\" per line</string>
+    <string name="chucker_mock_invalid_headers" translatable="false">Each line must be a header such as \"Content-Type: application/json\"</string>
+    <string name="chucker_mock_body" translatable="false">Body</string>
+    <string name="chucker_mock_map_local_note" translatable="false">Override keeps the headers of the server that aren\'t listed here.</string>
+    <string name="chucker_mock_network_interceptor" translatable="false">This call was recorded by a network interceptor. Add ChuckerInterceptor with addInterceptor to mock it.</string>
+    <string name="chucker_mock_ignored" translatable="false">Not applied: mocking requires addInterceptor</string>
+    <string name="chucker_mock_map_local_mode_mock" translatable="false">Mock</string>
+    <string name="chucker_mock_map_local_mode_override" translatable="false">Override</string>
+    <string name="chucker_mock_disable_all" translatable="false">Disable all</string>
+    <string name="chucker_mock_delete_all" translatable="false">Delete all mocks</string>
+    <string name="chucker_mock_delete_all_positive" translatable="false">Delete all</string>
+    <string name="chucker_mock_off" translatable="false">Off</string>
+    <string name="chucker_mock_summary_named" translatable="false">%1$s · %2$s</string>
+    <string name="chucker_mock_summary_map_remote" translatable="false">Map Remote → %1$s</string>
+    <string name="chucker_mock_summary_map_local_mock" translatable="false">Map Local · Mock</string>
+    <string name="chucker_mock_summary_map_local_override" translatable="false">Map Local · Override</string>
+    <string name="chucker_mock_rule_map_local" translatable="false">Map Local · %1$s · %2$d</string>
+    <string name="chucker_mock_rules_empty" translatable="false">No mocks yet. Open a request and tap \"Mock this endpoint\" to add one.</string>
+    <string name="chucker_mock_endpoint" translatable="false">%1$s %2$s</string>
+    <string name="chucker_mock_endpoint_title" translatable="false">Mock</string>
+    <string name="chucker_mock_choose" translatable="false">Choose the mock applied to future calls of this endpoint:</string>
+    <string name="chucker_mock_endpoint_empty" translatable="false">No mocks for this endpoint yet. Add one, such as one per test case, and choose it here.</string>
+    <string name="chucker_mock_new" translatable="false">New mock for this endpoint</string>
+    <string name="chucker_mock_edit" translatable="false">Edit</string>
+    <string name="chucker_mock_edit_title" translatable="false">Edit mock</string>
+    <string name="chucker_mock_new_title" translatable="false">New mock</string>
+    <string name="chucker_mock_name" translatable="false">Name</string>
+    <string name="chucker_mock_name_helper" translatable="false">Such as the test case it\'s for</string>
+    <string name="chucker_mock_invalid_name" translatable="false">Enter a name</string>
+    <string name="chucker_mock_note" translatable="false">Applies to future calls of this method and URL, whatever their query parameters, while this mock is chosen and mocking is on. Only the selected type is applied; the other one is kept for later.</string>
+    <string name="chucker_mock_search_body" translatable="false">Search the body</string>
+    <string name="chucker_mock_search_results" translatable="false">%1$d / %2$d</string>
+    <string name="chucker_mock_search_no_results" translatable="false">No results</string>
+    <string name="chucker_mock_discard_title" translatable="false">Discard changes?</string>
+    <string name="chucker_mock_discard_message" translatable="false">The changes to this mock haven\'t been saved.</string>
+    <string name="chucker_mock_discard" translatable="false">Discard</string>
+    <string name="chucker_mock_keep_editing" translatable="false">Keep editing</string>
+    <string name="chucker_mock_saved" translatable="false">Mock saved</string>
+    <string name="chucker_mock_deleted" translatable="false">Mock deleted</string>
+    <string name="chucker_mock_delete_mock" translatable="false">Delete mock</string>
+    <string name="chucker_mock_delete_endpoint" translatable="false">Delete all mocks of this endpoint</string>
+    <string name="chucker_mock_delete_endpoint_confirmation" translatable="false">Delete all the mocks of this endpoint? They can\'t be recovered.</string>
+    <string name="chucker_mock_delete_all_confirmation" translatable="false">Delete the mocks of every endpoint? They can\'t be recovered. To stop mocking but keep them, use \"Disable all\" instead.</string>
+    <string name="chucker_mock_all_disabled" translatable="false">Endpoints no longer mocked: %1$d</string>
+    <string name="chucker_mock_all_deleted" translatable="false">Endpoints deleted: %1$d</string>
+    <string name="chucker_mock_none_chosen" translatable="false">No mock chosen</string>
+    <string name="chucker_mock_failed" translatable="false">Couldn\'t access mocks</string>
 </resources>

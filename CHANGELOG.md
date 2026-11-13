@@ -9,7 +9,7 @@ Please add your entries according to this format.
 
 -   Long-press the payload copy button to choose between copying the raw body or the formatted body [#1613]
 -   Display the connected peer IP in transaction details when Chucker is used as a network interceptor [#1180]
--   Map Remote: send future calls of an endpoint to another URL from the Chucker UI, without changing code or rebuilding
+-   Mock endpoints from the Chucker UI, without changing code or rebuilding: save named mocks per endpoint, such as one per test case, and choose which one applies. A mock sends calls to another URL (Map Remote), or answers them with a response written in Chucker (Map Local)
 
 ### Fixed
 

@@ -26,6 +26,8 @@ internal data class HttpTransactionTuple(
     @ColumnInfo(name = "graphQlDetected") var graphQlDetected: Boolean = false,
     @ColumnInfo(name = "graphQlOperationName") var graphQlOperationName: String?,
     @ColumnInfo(name = "mappedUrl") var mappedUrl: String? = null,
+    @ColumnInfo(name = "mapLocalMode") var mapLocalMode: String? = null,
+    @ColumnInfo(name = "mockName") var mockName: String? = null,
 ) {
     val isSsl: Boolean get() = (mappedUrl?.substringBefore(':') ?: scheme).equals("https", ignoreCase = true)
 

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/disable_all_rules"
+        android:title="@string/chucker_mock_disable_all"
+        android:visible="false"
+        app:showAsAction="always|withText" />
+    <item
+        android:id="@+id/delete_all_rules"
+        android:icon="@drawable/chucker_ic_delete_white"
+        android:title="@string/chucker_mock_delete_all"
+        android:visible="false"
+        app:showAsAction="always" />
+</menu>

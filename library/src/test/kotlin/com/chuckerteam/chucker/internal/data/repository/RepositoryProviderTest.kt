@@ -47,16 +47,16 @@ internal class RepositoryProviderTest {
     }
 
     @Test
-    fun `fails with uninitialized Map Remote rule repository`() {
+    fun `fails with uninitialized mock repository`() {
         assertThrows<IllegalStateException> {
-            RepositoryProvider.mapRemoteRule()
+            RepositoryProvider.mock()
         }
     }
 
     @Test
-    fun `Map Remote rule repository is cached`() {
+    fun `mock repository is cached`() {
         RepositoryProvider.initialize(context)
-        assertThat(RepositoryProvider.mapRemoteRule()).isSameInstanceAs(RepositoryProvider.mapRemoteRule())
+        assertThat(RepositoryProvider.mock()).isSameInstanceAs(RepositoryProvider.mock())
     }
 
     @Test

@@ -24,11 +24,15 @@
             android:theme="@style/Chucker.Theme" />
 
         <activity
-            android:name="com.chuckerteam.chucker.internal.ui.mapremote.MapRemoteRulesActivity"
+            android:name="com.chuckerteam.chucker.internal.ui.mock.MockEndpointsActivity"
             android:theme="@style/Chucker.Theme" />
 
         <activity
-            android:name="com.chuckerteam.chucker.internal.ui.mapremote.MapRemoteRuleEditActivity"
+            android:name="com.chuckerteam.chucker.internal.ui.mock.MockEndpointActivity"
+            android:theme="@style/Chucker.Theme" />
+
+        <activity
+            android:name="com.chuckerteam.chucker.internal.ui.mock.MockEditActivity"
             android:theme="@style/Chucker.Theme"
             android:windowSoftInputMode="adjustResize" />
 

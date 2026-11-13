@@ -2,9 +2,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/delete_rule"
+        android:id="@+id/delete_endpoint"
         android:icon="@drawable/chucker_ic_delete_white"
-        android:title="@string/chucker_map_remote_delete"
+        android:title="@string/chucker_mock_delete_endpoint"
         android:visible="false"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="always" />
 </menu>

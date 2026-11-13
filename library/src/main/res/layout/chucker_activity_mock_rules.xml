@@ -19,7 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:popupTheme="@style/Chucker.Theme"
-            app:title="@string/chucker_map_remote_rules" />
+            app:title="@string/chucker_mock_rules" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -33,7 +33,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/appBarLayout"
-        tools:listitem="@layout/chucker_list_item_map_remote_rule" />
+        tools:listitem="@layout/chucker_list_item_mock_endpoint" />
 
     <TextView
         android:id="@+id/emptyText"
@@ -41,7 +41,7 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/chucker_doub_grid"
         android:gravity="center"
-        android:text="@string/chucker_map_remote_rules_empty"
+        android:text="@string/chucker_mock_rules_empty"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
